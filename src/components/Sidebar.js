@@ -54,9 +54,10 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
   const handleItemClick = (itemId) => {
     setActiveItem(itemId);
     onNavigate(itemId); // Notify parent component about navigation
-    // Close sidebar on mobile after selection
+    // Close sidebar on mobile after selection with haptic-like feedback
     if (isMobile && isOpen) {
-      setTimeout(() => onToggle(), 150);
+      // Add a slight delay to show selection feedback
+      setTimeout(() => onToggle(), 200);
     }
   };
 
@@ -67,12 +68,13 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
     shadow-2xl shadow-purple-500/10 lg:shadow-none
     transition-all duration-500 ease-in-out backdrop-blur-xl
     ${isMobile 
-      ? `w-80 ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0 min-h-screen` 
+      ? `w-80 max-w-[85vw] ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0 min-h-screen safe-area-inset-top` 
       : 'w-16 hover:w-20 relative translate-x-0 min-h-screen group'
     }
     before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r 
     before:from-purple-600/10 before:to-blue-600/10 before:opacity-0 
     before:transition-opacity before:duration-500 hover:before:opacity-100
+    overscroll-behavior-contain
   `;
 
   return (
@@ -80,7 +82,7 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
       {/* Mobile Overlay */}
       {isMobile && isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-all duration-300"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-all duration-300"
           onClick={onToggle}
         />
       )}
@@ -95,35 +97,43 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
         </div>
 
         {/* Header - Dashboard Icon */}
-        <div className="relative flex items-center justify-center py-6 border-b border-white/10">
-          <button 
-            onClick={() => handleItemClick('dashboard')}
-            className={`relative p-3 rounded-2xl transition-all duration-300 transform hover:scale-110 ${
-              activeItem === 'dashboard' 
-                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/30 animate-pulse' 
-                : 'text-gray-300 hover:bg-white/10 hover:text-white'
-            } group`}
-            title="Dashboard"
-          >
-            <Squares2X2Icon className="h-6 w-6 transition-transform duration-300 group-hover:rotate-6" />
-            {activeItem === 'dashboard' && (
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+        <div className="relative flex items-center justify-between px-6 py-6 border-b border-white/10">
+          <div className="flex items-center space-x-3">
+            <button 
+              onClick={() => handleItemClick('dashboard')}
+              className={`relative p-3 rounded-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                activeItem === 'dashboard' 
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/30 animate-pulse' 
+                  : 'text-gray-300 hover:bg-white/10 hover:text-white'
+              } group`}
+              title="Dashboard"
+            >
+              <Squares2X2Icon className="h-6 w-6 transition-transform duration-300 group-hover:rotate-6" />
+              {activeItem === 'dashboard' && (
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+              )}
+            </button>
+            {isMobile && (
+              <div className="flex-1 min-w-0">
+                <h2 className="text-white font-semibold text-xl truncate">Dashboard</h2>
+                <p className="text-gray-300 text-base truncate">Todo Management</p>
+              </div>
             )}
-          </button>
+          </div>
+          
           {isMobile && (
-            <div className="absolute right-4">
-              <button
-                onClick={onToggle}
-                className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-              >
-                <XMarkIcon className="h-6 w-6" />
-              </button>
-            </div>
+            <button
+              onClick={onToggle}
+              className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 
+                active:scale-95 transform hover:scale-105 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
           )}
         </div>
 
         {/* Navigation Items */}
-        <nav className="relative flex flex-col flex-1 py-6 space-y-3">
+        <nav className="relative flex flex-col flex-1 py-4 sm:py-6 space-y-2 sm:space-y-3">
           {menuItems.filter(item => item.id !== 'dashboard').map((item, index) => {
             const IconComponent = item.icon;
             const isActive = activeItem === item.id;
@@ -136,8 +146,8 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
               >
                 <button
                   onClick={() => handleItemClick(item.id)}
-                  className={`relative ${isMobile ? 'flex items-center space-x-4 w-full p-4' : 'p-3'} 
-                    rounded-2xl transition-all duration-300 group transform hover:scale-105 ${
+                  className={`relative ${isMobile ? 'flex items-center space-x-4 w-full p-4 text-left' : 'p-3'} 
+                    rounded-2xl transition-all duration-300 group transform hover:scale-105 active:scale-95 ${
                     isActive 
                       ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/30' 
                       : 'text-gray-300 hover:bg-white/10 hover:text-white hover:shadow-lg hover:shadow-white/5'
@@ -150,7 +160,7 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
                   )}
                   
                   {/* Icon with animation */}
-                  <div className="relative">
+                  <div className="relative flex-shrink-0">
                     <IconComponent className={`h-6 w-6 transition-all duration-300 ${
                       isActive ? 'animate-bounce' : 'group-hover:rotate-12 group-hover:scale-110'
                     }`} />
@@ -158,7 +168,7 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
                   
                   {/* Mobile label */}
                   {isMobile && (
-                    <span className="font-medium text-lg tracking-wide">{item.label}</span>
+                    <span className="font-medium text-lg tracking-wide flex-1">{item.label}</span>
                   )}
                   
                   {/* Desktop tooltip */}
@@ -172,8 +182,13 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
                   )}
 
                   {/* Active indicator */}
-                  {isActive && (
+                  {isActive && !isMobile && (
                     <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full opacity-80 animate-pulse"></div>
+                  )}
+
+                  {/* Mobile active indicator */}
+                  {isActive && isMobile && (
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse flex-shrink-0"></div>
                   )}
                 </button>
               </div>

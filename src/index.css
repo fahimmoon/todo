@@ -148,6 +148,57 @@ html {
 
 /* Animation classes */
 @layer utilities {
+  /* Responsive touch improvements for mobile */
+  @media (max-width: 640px) {
+    .sidebar-item {
+      min-height: 48px; /* Improved touch target size */
+      touch-action: manipulation; /* Optimize for touch */
+    }
+    
+    .sidebar-item:active {
+      transform: scale(0.98) !important;
+      transition: transform 0.1s ease-out;
+    }
+    
+    /* Reduce animations on mobile for better performance */
+    .sidebar-float-1,
+    .sidebar-float-2,
+    .sidebar-float-3 {
+      animation-duration: 4s; /* Slightly faster animations */
+    }
+  }
+
+  /* Enhanced mobile responsiveness */
+  @media (max-width: 480px) {
+    .sidebar-item {
+      padding: 0.75rem 1rem; /* Better mobile padding */
+    }
+    
+    .sidebar-text {
+      font-size: 0.95rem; /* Slightly smaller text for small screens */
+    }
+    
+    /* Optimize sidebar width for very small screens */
+    .sidebar-container {
+      width: 85vw !important;
+      max-width: 300px !important;
+    }
+  }
+
+  /* Medium mobile devices optimization */
+  @media (min-width: 481px) and (max-width: 640px) {
+    .sidebar-container {
+      width: 320px !important;
+    }
+  }
+
+  /* High DPI screens optimization */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .blur-lg {
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+  }
   .animate-fade-in {
     animation: fadeIn 0.5s ease-in-out;
   }

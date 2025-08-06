@@ -7,7 +7,7 @@ import DocumentsPage from './pages/DocumentsPage';
 import CalendarPage from './pages/CalendarPage';
 import SettingsPage from './pages/SettingsPage';
 
-const Dashboard = ({ onSidebarToggle, currentPage, onNavigate }) => {
+const Dashboard = ({ onSidebarToggle, currentPage, onNavigate, sidebarOpen }) => {
   const renderPage = () => {
     switch (currentPage) {
       case 'profile':
@@ -26,14 +26,16 @@ const Dashboard = ({ onSidebarToggle, currentPage, onNavigate }) => {
   };
 
   return (
-    <main className="flex-1 min-h-screen bg-gray-50">
+    <main className={`flex-1 min-h-screen bg-gray-50 transition-all duration-500 ease-in-out ${
+      sidebarOpen ? 'lg:opacity-100' : 'lg:opacity-100'
+    }`}>
       {/* Header with better spacing */}
-      <div className="sticky top-0 z-10 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4">
+      <div className="sticky top-0 z-10 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm">
         <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
       </div>
       
-      {/* Main content with optimized padding */}
-      <div className="px-4 sm:px-6 lg:px-8 pb-8">
+      {/* Main content with optimized padding and responsive margins */}
+      <div className="px-4 sm:px-6 lg:px-8 pb-8 max-w-7xl mx-auto">
         {renderPage()}
       </div>
     </main>

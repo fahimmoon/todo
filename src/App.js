@@ -16,18 +16,21 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row overflow-hidden">
       <Sidebar 
         isOpen={sidebarOpen} 
         onToggle={toggleSidebar} 
         currentPage={currentPage}
         onNavigate={handleNavigation}
       />
-      <div className="flex-1">
+      <div className={`flex-1 transition-all duration-500 ease-in-out ${
+        sidebarOpen ? 'lg:ml-0' : 'lg:ml-0'
+      }`}>
         <Dashboard 
           onSidebarToggle={toggleSidebar} 
           currentPage={currentPage}
           onNavigate={handleNavigation}
+          sidebarOpen={sidebarOpen}
         />
       </div>
     </div>
