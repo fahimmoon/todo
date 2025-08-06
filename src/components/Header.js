@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
-const Header = () => {
+const Header = ({ onSidebarToggle }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -28,12 +28,25 @@ const Header = () => {
 
       {/* Mobile Navigation Toggle */}
       <div className="lg:hidden flex items-center justify-between w-full">
-        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+        <div className="flex items-center space-x-3">
+          {/* Sidebar Toggle Button */}
+          <button 
+            onClick={onSidebarToggle}
+            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Toggle sidebar"
+          >
+            <Bars3Icon className="h-6 w-6" />
+          </button>
+          <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+        </div>
         <button 
           onClick={toggleMobileMenu}
-          className="p-2 text-gray-500 hover:text-gray-900"
+          className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Toggle menu"
         >
-          <Bars3Icon className="h-6 w-6" />
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
         </button>
       </div>
 
