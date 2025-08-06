@@ -1,29 +1,101 @@
-import React from 'react';
-import { MagnifyingGlassIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { MagnifyingGlassIcon, SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
 const Header = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
+
+  const handleExportData = () => {
+    alert('Exporting data...');
+  };
+
+  const handleAddBoard = () => {
+    alert('Adding new board...');
+  };
+
   return (
-    <header className="flex justify-between items-center">
-      <nav className="flex items-center space-x-8">
-        <a href="#" className="text-gray-900 font-bold border-b-2 border-indigo-600 pb-2">Dashboard</a>
-        <a href="#" className="text-gray-500 hover:text-gray-900">Workflows</a>
-        <a href="#" className="text-gray-500 hover:text-gray-900">Integrations</a>
+    <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+      {/* Desktop Navigation */}
+      <nav className="hidden lg:flex items-center space-x-8">
+        <button className="text-gray-900 font-bold border-b-2 border-indigo-600 pb-2">Dashboard</button>
+        <button className="text-gray-500 hover:text-gray-900 transition-colors">Workflows</button>
+        <button className="text-gray-500 hover:text-gray-900 transition-colors">Integrations</button>
       </nav>
-      <div className="flex items-center space-x-4">
-        <div className="relative">
+
+      {/* Mobile Navigation Toggle */}
+      <div className="lg:hidden flex items-center justify-between w-full">
+        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+        <button 
+          onClick={toggleMobileMenu}
+          className="p-2 text-gray-500 hover:text-gray-900"
+        >
+          <Bars3Icon className="h-6 w-6" />
+        </button>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {showMobileMenu && (
+        <nav className="lg:hidden flex flex-col space-y-2 w-full bg-white border rounded-lg p-4">
+          <button className="text-gray-900 font-bold border-b-2 border-indigo-600 pb-2 text-left">Dashboard</button>
+          <button className="text-gray-500 hover:text-gray-900 transition-colors text-left">Workflows</button>
+          <button className="text-gray-500 hover:text-gray-900 transition-colors text-left">Integrations</button>
+        </nav>
+      )}
+
+      {/* Header Controls */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full lg:w-auto">
+        {/* Search Bar */}
+        <div className="relative flex-1 sm:flex-none">
           <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input type="text" placeholder="Search or type command" className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+          <input 
+            type="text" 
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Search or type command" 
+            className="w-full sm:w-64 pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-all" 
+          />
         </div>
-        <div className="flex items-center bg-white border rounded-lg p-1">
-          <button className="p-2 bg-indigo-600 text-white rounded-lg">
-            <SunIcon className="h-5 w-5" />
-          </button>
-          <button className="p-2 text-gray-500 rounded-lg">
-            <MoonIcon className="h-5 w-5" />
-          </button>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* Theme Toggle */}
+          <div className="flex items-center bg-white border rounded-lg p-1">
+            <button 
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-lg transition-colors ${!isDarkMode ? 'bg-indigo-600 text-white' : 'text-gray-500'}`}
+            >
+              <SunIcon className="h-5 w-5" />
+            </button>
+            <button 
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-lg transition-colors ${isDarkMode ? 'bg-indigo-600 text-white' : 'text-gray-500'}`}
+            >
+              <MoonIcon className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Export and Add Buttons */}
+          <div className="flex gap-2">
+            <button 
+              onClick={handleExportData}
+              className="px-3 sm:px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors text-sm"
+            >
+              <span className="hidden sm:inline">Export data</span>
+              <span className="sm:hidden">Export</span>
+            </button>
+            <button 
+              onClick={handleAddBoard}
+              className="px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+            >
+              <span className="hidden sm:inline">Add new board</span>
+              <span className="sm:hidden">Add</span>
+            </button>
+          </div>
         </div>
-        <button className="px-4 py-2 border rounded-lg">Export data</button>
-        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Add new board</button>
       </div>
     </header>
   );

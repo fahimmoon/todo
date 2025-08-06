@@ -12,20 +12,26 @@ import BoardMeeting from './BoardMeeting';
 
 const Dashboard = () => {
   return (
-    <main className="flex-1 p-8">
+    <main className="flex-1 p-4 sm:p-6 lg:p-8 min-h-screen bg-gray-50">
       <Header />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-        <div className="lg:col-span-2 space-y-8">
+      
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-6 lg:mt-8">
+        {/* Left Column - Main Content */}
+        <div className="xl:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
           <WelcomeBanner />
           <Notifications />
           <TodayTasks />
         </div>
-        <div className="space-y-8">
+
+        {/* Right Column - Sidebar Content */}
+        <div className="space-y-4 sm:space-y-6 lg:space-y-8">
           <QuickActions />
           <Assignments />
           <Calendar />
           <PremiumBanner />
-          <div className="grid grid-cols-2 gap-8">
+          
+          {/* Bottom Row - Data Research and Board Meeting */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             <DataResearch />
             <BoardMeeting />
           </div>
