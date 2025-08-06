@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
-const Header = ({ onSidebarToggle }) => {
+const Header = ({ onSidebarToggle, currentPage }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const getPageTitle = (page) => {
+    switch (page) {
+      case 'profile':
+        return 'Profile';
+      case 'notifications':
+        return 'Notifications';
+      case 'documents':
+        return 'Documents';
+      case 'calendar':
+        return 'Calendar';
+      case 'settings':
+        return 'Settings';
+      default:
+        return 'Dashboard';
+    }
+  };
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
@@ -37,7 +54,7 @@ const Header = ({ onSidebarToggle }) => {
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-          <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="text-xl font-bold text-gray-900">{getPageTitle(currentPage)}</h1>
         </div>
         <button 
           onClick={toggleMobileMenu}
@@ -53,7 +70,7 @@ const Header = ({ onSidebarToggle }) => {
       {/* Mobile Navigation Menu */}
       {showMobileMenu && (
         <nav className="lg:hidden flex flex-col space-y-2 w-full bg-white border rounded-lg p-4">
-          <button className="text-gray-900 font-bold border-b-2 border-indigo-600 pb-2 text-left">Dashboard</button>
+          <button className={`text-left pb-2 ${currentPage === 'dashboard' ? 'text-gray-900 font-bold border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-900 transition-colors'}`}>Dashboard</button>
           <button className="text-gray-500 hover:text-gray-900 transition-colors text-left">Workflows</button>
           <button className="text-gray-500 hover:text-gray-900 transition-colors text-left">Integrations</button>
         </nav>

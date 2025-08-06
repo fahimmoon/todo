@@ -9,9 +9,14 @@ import {
   XMarkIcon 
 } from '@heroicons/react/24/outline';
 
-const Sidebar = ({ isOpen, onToggle }) => {
-  const [activeItem, setActiveItem] = useState('dashboard');
+const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
+  const [activeItem, setActiveItem] = useState(currentPage || 'dashboard');
   const [isMobile, setIsMobile] = useState(false);
+
+  // Update active item when currentPage changes
+  useEffect(() => {
+    setActiveItem(currentPage || 'dashboard');
+  }, [currentPage]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -39,7 +44,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
 
   const menuItems = [
     { id: 'dashboard', icon: Squares2X2Icon, label: 'Dashboard', color: 'text-blue-500' },
-    { id: 'user', icon: UserIcon, label: 'Profile', color: 'text-green-500' },
+    { id: 'profile', icon: UserIcon, label: 'Profile', color: 'text-green-500' },
     { id: 'notifications', icon: BellIcon, label: 'Notifications', color: 'text-yellow-500' },
     { id: 'documents', icon: DocumentTextIcon, label: 'Documents', color: 'text-purple-500' },
     { id: 'calendar', icon: CalendarIcon, label: 'Calendar', color: 'text-red-500' },
@@ -48,12 +53,11 @@ const Sidebar = ({ isOpen, onToggle }) => {
 
   const handleItemClick = (itemId) => {
     setActiveItem(itemId);
+    onNavigate(itemId); // Notify parent component about navigation
     // Close sidebar on mobile after selection
     if (isMobile && isOpen) {
       setTimeout(() => onToggle(), 150);
     }
-    // Here you could add navigation logic
-    console.log(`Navigating to ${itemId}`);
   };
 
   const sidebarClasses = `
