@@ -62,13 +62,13 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
   };
 
   const sidebarClasses = `
-    sidebar-container fixed lg:relative z-50 lg:z-auto
+    sidebar-container fixed lg:relative z-40 lg:z-auto
     bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 
     border-r border-purple-500/20 flex flex-col 
     shadow-2xl shadow-purple-500/10 lg:shadow-none
     transition-all duration-500 ease-in-out backdrop-blur-xl
     ${isMobile 
-      ? `w-80 max-w-[85vw] ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0 min-h-screen safe-area-inset-top` 
+      ? `w-80 max-w-[85vw] ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-16 h-[calc(100vh-4rem)] safe-area-inset-top` 
       : 'w-16 hover:w-20 relative translate-x-0 min-h-screen group'
     }
     before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r 
@@ -82,7 +82,8 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
       {/* Mobile Overlay */}
       {isMobile && isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-all duration-300"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden transition-all duration-300"
+          style={{ top: '4rem' }}
           onClick={onToggle}
         />
       )}

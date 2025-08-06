@@ -30,7 +30,7 @@ const Dashboard = ({ onSidebarToggle, currentPage, onNavigate, sidebarOpen }) =>
       sidebarOpen ? 'lg:opacity-100' : 'lg:opacity-100'
     }`}>
       {/* Header with better spacing */}
-      <div className="sticky top-0 z-10 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm">
+      <div className="sticky top-0 z-50 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm border-b border-gray-200">
         <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
       </div>
       
