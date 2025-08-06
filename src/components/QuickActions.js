@@ -37,38 +37,43 @@ const QuickActions = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-      {/* Add Button */}
-      <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md flex items-center justify-center hover:shadow-lg transition-all duration-200 cursor-pointer group">
+    <div className="bg-white rounded-xl shadow-sm border p-4 lg:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
         <button 
           onClick={handleAddClick}
-          className="text-indigo-600 group-hover:scale-110 transition-transform duration-200"
+          className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
         >
-          <PlusIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+          <PlusIcon className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Action Cards */}
-      {actions.map((action) => {
-        const IconComponent = action.icon;
-        return (
-          <div 
-            key={action.id}
-            className="bg-white p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1"
-            onMouseEnter={() => setHoveredAction(action.id)}
-            onMouseLeave={() => setHoveredAction(null)}
-            onClick={() => handleActionClick(action)}
-          >
-            <IconComponent 
-              className={`h-6 w-6 sm:h-8 sm:w-8 ${action.color} mb-2 transition-colors duration-200 ${
-                hoveredAction === action.id ? 'scale-110' : ''
-              }`} 
-            />
-            <h3 className="font-bold text-sm sm:text-base mb-1">{action.title}</h3>
-            <p className="text-xs sm:text-sm text-gray-500 leading-tight">{action.description}</p>
-          </div>
-        );
-      })}
+      <div className="space-y-3">
+        {actions.map((action) => {
+          const IconComponent = action.icon;
+          return (
+            <div 
+              key={action.id}
+              className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group"
+              onMouseEnter={() => setHoveredAction(action.id)}
+              onMouseLeave={() => setHoveredAction(null)}
+              onClick={() => handleActionClick(action)}
+            >
+              <div className={`p-2 rounded-lg ${action.color.replace('text-', 'bg-').replace('-600', '-100')} mr-3`}>
+                <IconComponent 
+                  className={`h-5 w-5 ${action.color} transition-transform duration-200 ${
+                    hoveredAction === action.id ? 'scale-110' : ''
+                  }`} 
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-sm text-gray-900">{action.title}</h3>
+                <p className="text-xs text-gray-500">{action.description}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

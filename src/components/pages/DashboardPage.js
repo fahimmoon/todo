@@ -11,24 +11,44 @@ import BoardMeeting from '../BoardMeeting';
 
 const DashboardPage = () => {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-      {/* Left Column - Main Content */}
-      <div className="xl:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
+    <div className="max-w-7xl mx-auto">
+      {/* Welcome Banner - Full Width */}
+      <div className="mb-6 lg:mb-8">
         <WelcomeBanner />
-        <Notifications />
-        <TodayTasks />
       </div>
 
-      {/* Right Column - Sidebar Content */}
-      <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-        <QuickActions />
-        <Assignments />
-        <Calendar />
-        <PremiumBanner />
-        
-        {/* Bottom Row - Data Research and Board Meeting */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-          <DataResearch />
+      {/* Main Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 xl:gap-8">
+        {/* Left Column - Main Content */}
+        <div className="lg:col-span-8 space-y-4 lg:space-y-6">
+          {/* Top Row - Notifications and Quick Actions */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+            <div className="xl:col-span-2">
+              <Notifications />
+            </div>
+            <div className="xl:col-span-1">
+              <QuickActions />
+            </div>
+          </div>
+
+          {/* Today's Tasks */}
+          <div>
+            <TodayTasks />
+          </div>
+
+          {/* Bottom Row - Data Research and Assignments */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
+            <DataResearch />
+            <div>
+              <Assignments />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Sidebar Content */}
+        <div className="lg:col-span-4 space-y-4 lg:space-y-6">
+          <Calendar />
+          <PremiumBanner />
           <BoardMeeting />
         </div>
       </div>

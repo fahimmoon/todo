@@ -26,10 +26,14 @@ const Dashboard = ({ onSidebarToggle, currentPage, onNavigate }) => {
   };
 
   return (
-    <main className="flex-1 p-4 sm:p-6 lg:p-8 min-h-screen bg-gray-50">
-      <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
+    <main className="flex-1 min-h-screen bg-gray-50">
+      {/* Header with better spacing */}
+      <div className="sticky top-0 z-10 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4">
+        <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
+      </div>
       
-      <div className="mt-6 lg:mt-8">
+      {/* Main content with optimized padding */}
+      <div className="px-4 sm:px-6 lg:px-8 pb-8">
         {renderPage()}
       </div>
     </main>

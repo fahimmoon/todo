@@ -2,10 +2,27 @@ import React from 'react';
 
 const WelcomeBanner = () => {
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-gray-900">Hi, James!</h1>
-      <p className="text-gray-500 mt-2">What are your planes for today?</p>
-      <p className="text-gray-500 mt-4">This platform is designed to revolutionize the way you organize and access your notes</p>
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 lg:p-8 border border-blue-100">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex-1">
+          <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2">
+            Hi, James! 👋
+          </h1>
+          <p className="text-lg text-gray-600 mb-2">What are your plans for today?</p>
+          <p className="text-gray-500 max-w-2xl">
+            This platform is designed to revolutionize the way you organize and access your notes
+          </p>
+        </div>
+        
+        <div className="mt-4 lg:mt-0 lg:ml-8 flex flex-col sm:flex-row gap-3">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            Create New Task
+          </button>
+          <button className="border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+            View Reports
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

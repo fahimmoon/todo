@@ -58,39 +58,41 @@ const Assignments = () => {
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+    <div className="bg-white p-4 lg:p-6 rounded-xl shadow-sm border">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-lg">Assignments</h2>
+        <h2 className="font-semibold text-lg text-gray-900">Assignments</h2>
         <button 
           onClick={handleEdit}
-          className="text-sm hover:text-gray-700 transition-colors flex items-center gap-1"
+          className="text-sm text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-1"
         >
-          <PencilIcon className="h-3 w-3" />
+          <PencilIcon className="h-4 w-4" />
           Edit
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {assignments.map((assignment) => (
           <div 
             key={assignment.id}
-            className="cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
+            className="cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition-colors border border-gray-100 hover:border-gray-200"
             onClick={() => handleAssignmentClick(assignment)}
           >
-            <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs sm:text-sm text-gray-500 mb-1">{assignment.category}</p>
-                <p className="font-bold text-sm sm:text-base mb-2 leading-tight">{assignment.title}</p>
-                <span className={`text-xs px-2 py-1 rounded-full inline-block ${assignment.tagColor}`}>
-                  {assignment.tag}
-                </span>
+            <div className="space-y-3">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">{assignment.category}</p>
+                <p className="font-medium text-sm leading-tight text-gray-900 mb-2">{assignment.title}</p>
               </div>
               
-              <div className="flex flex-row sm:flex-col items-start sm:items-end gap-2 sm:gap-0">
-                <span className={`text-xs px-2 py-1 rounded-full ${assignment.priorityColor}`}>
-                  {assignment.priority}
+              <div className="flex items-center justify-between">
+                <span className={`text-xs px-3 py-1 rounded-full font-medium ${assignment.tagColor}`}>
+                  {assignment.tag}
                 </span>
-                <p className="text-xs sm:text-sm text-gray-500 mt-0 sm:mt-2">{assignment.assignee}</p>
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${assignment.priorityColor}`}>
+                    {assignment.priority}
+                  </span>
+                  <p className="text-xs text-gray-500">{assignment.assignee}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -158,7 +160,7 @@ const Assignments = () => {
         {/* Add New Assignment Button */}
         <button 
           onClick={() => setShowAddForm(!showAddForm)}
-          className="w-full py-3 border-dashed border-2 border-gray-300 rounded-lg text-indigo-600 font-semibold hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-gray-200 rounded-lg text-gray-600 font-medium hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center justify-center gap-2"
         >
           <PlusIcon className="h-4 w-4" />
           Add new assignment
