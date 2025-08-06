@@ -83,12 +83,20 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
 
       {/* Sidebar */}
       <div className={sidebarClasses}>
-        {/* Header */}
+        {/* Header - Make Dashboard Icon Clickable */}
         <div className="flex items-center justify-between px-4 lg:px-0 lg:justify-center">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-indigo-700 rounded-lg">
+            <button 
+              onClick={() => handleItemClick('dashboard')}
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                activeItem === 'dashboard' 
+                  ? 'bg-indigo-500 scale-105 shadow-lg' 
+                  : 'bg-indigo-700 hover:bg-indigo-500 hover:scale-105'
+              }`}
+              title="Go to Dashboard"
+            >
               <Squares2X2Icon className="h-6 w-6 lg:h-8 lg:w-8" />
-            </div>
+            </button>
             {isMobile && (
               <span className="font-bold text-lg">Dashboard</span>
             )}
@@ -107,7 +115,7 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
 
         {/* Navigation Items */}
         <nav className="flex flex-col flex-1 px-4 lg:px-0 lg:items-center space-y-2 lg:space-y-6">
-          {menuItems.slice(1).map((item) => {
+          {menuItems.map((item) => {
             const IconComponent = item.icon;
             const isActive = activeItem === item.id;
             

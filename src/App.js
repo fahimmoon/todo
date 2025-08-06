@@ -27,6 +27,7 @@ function App() {
         <Dashboard 
           onSidebarToggle={toggleSidebar} 
           currentPage={currentPage}
+          onNavigate={handleNavigation}
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/outline';
 
-const Header = ({ onSidebarToggle, currentPage }) => {
+const Header = ({ onSidebarToggle, currentPage, onNavigate }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -20,6 +20,12 @@ const Header = ({ onSidebarToggle, currentPage }) => {
         return 'Settings';
       default:
         return 'Dashboard';
+    }
+  };
+
+  const goToDashboard = () => {
+    if (onNavigate) {
+      onNavigate('dashboard');
     }
   };
 
@@ -54,7 +60,23 @@ const Header = ({ onSidebarToggle, currentPage }) => {
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-          <h1 className="text-xl font-bold text-gray-900">{getPageTitle(currentPage)}</h1>
+          
+          {/* Page Title with Dashboard Link */}
+          {currentPage === 'dashboard' ? (
+            <h1 className="text-xl font-bold text-gray-900">{getPageTitle(currentPage)}</h1>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={goToDashboard}
+                className="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
+                title="Go back to Dashboard"
+              >
+                ← Dashboard
+              </button>
+              <span className="text-gray-400">/</span>
+              <h1 className="text-xl font-bold text-gray-900">{getPageTitle(currentPage)}</h1>
+            </div>
+          )}
         </div>
         <button 
           onClick={toggleMobileMenu}
