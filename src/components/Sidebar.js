@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
     shadow-2xl shadow-purple-500/10 lg:shadow-none
     transition-all duration-500 ease-in-out backdrop-blur-xl
     ${isMobile 
-      ? `w-80 max-w-[85vw] ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-[5rem] h-[calc(100vh-5rem)]` 
+      ? `w-80 max-w-[85vw] ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0 h-screen` 
       : 'w-16 hover:w-20 relative translate-x-0 min-h-screen group'
     }
     before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r 
@@ -83,7 +83,6 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
       {isMobile && isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] lg:hidden transition-all duration-300"
-          style={{ top: '5rem' }}
           onClick={onToggle}
         />
       )}
