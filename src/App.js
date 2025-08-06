@@ -1,38 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
-import './index.css';
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+      if (window.innerWidth >= 1024) {
+        setSidebarOpen(false); // Close mobile sidebar on desktop
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen(!isSidebarOpen);
   };
 
-  const handleNavigation = (page) => {
+  const handleNavigate = (page) => {
     setCurrentPage(page);
+    // Close sidebar on mobile after navigation
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row overflow-hidden">
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onToggle={toggleSidebar} 
-        currentPage={currentPage}
-        onNavigate={handleNavigation}
-      />
-      <div className={`flex-1 transition-all duration-500 ease-in-out ${
-        sidebarOpen ? 'lg:ml-0' : 'lg:ml-0'
-      }`}>
-        <Dashboard 
-          onSidebarToggle={toggleSidebar} 
+    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Desktop Sidebar - Part of flex layout */}
+      {!isMobile && (
+        <Sidebar 
+          isOpen={isSidebarOpen}
+          onToggle={toggleSidebar}
           currentPage={currentPage}
-          onNavigate={handleNavigation}
-          sidebarOpen={sidebarOpen}
+          onNavigate={handleNavigate}
+        />
+      )}
+
+      {/* Main content - Ensure it's always visible on mobile */}
+      <div className={`flex-1 min-w-0 relative ${isMobile ? 'w-full overflow-auto' : ''}`}>
+        <Dashboard 
+          onSidebarToggle={toggleSidebar}
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+          sidebarOpen={isSidebarOpen}
         />
       </div>
+      
+      {/* Mobile Sidebar - Fixed overlay, not part of flex layout */}
+      {isMobile && (
+        <Sidebar 
+          isOpen={isSidebarOpen}
+          onToggle={toggleSidebar}
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+        />
+      )}
     </div>
   );
 }
