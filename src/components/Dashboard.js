@@ -30,12 +30,12 @@ const Dashboard = ({ onSidebarToggle, currentPage, onNavigate, sidebarOpen }) =>
       sidebarOpen ? 'lg:opacity-100' : 'lg:opacity-100'
     }`}>
       {/* Header with better spacing */}
-      <div className="sticky top-0 z-50 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm border-b border-gray-200">
+      <div className="fixed top-0 left-0 right-0 z-[100] bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm border-b border-gray-200">
         <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
       </div>
       
       {/* Main content with optimized padding and responsive margins */}
-      <div className="px-4 sm:px-6 lg:px-8 pb-8 max-w-7xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 pb-8 pt-20 max-w-7xl mx-auto">
         {renderPage()}
       </div>
     </main>

@@ -148,6 +148,22 @@ html {
 
 /* Animation classes */
 @layer utilities {
+  /* Fixed header ensures it's always on top */
+  .header-fixed {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 100 !important;
+  }
+  
+  /* Sidebar positioning below header */
+  .sidebar-below-header {
+    top: 5rem !important;
+    height: calc(100vh - 5rem) !important;
+    z-index: 90 !important;
+  }
+  
   /* Responsive touch improvements for mobile */
   @media (max-width: 640px) {
     .sidebar-item {
