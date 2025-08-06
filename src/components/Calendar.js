@@ -70,22 +70,22 @@ const Calendar = () => {
   const days = getDaysInMonth();
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+    <div className="bg-white p-4 rounded-lg shadow-md">
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-lg">
+        <h2 className="font-bold text-base">
           {months[currentDate.getMonth()]} {currentDate.getFullYear()}
         </h2>
         <div className="flex items-center space-x-1">
           <button 
             onClick={() => navigateMonth(-1)}
-            className="p-1 hover:bg-gray-100 rounded transition-colors"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
           >
             <ChevronLeftIcon className="h-4 w-4" />
           </button>
           <button 
             onClick={() => navigateMonth(1)}
-            className="p-1 hover:bg-gray-100 rounded transition-colors"
+            className="p-2 hover:bg-gray-100 rounded transition-colors"
           >
             <ChevronRightIcon className="h-4 w-4" />
           </button>
@@ -93,9 +93,9 @@ const Calendar = () => {
       </div>
 
       {/* Days of Week Header */}
-      <div className="grid grid-cols-7 text-center text-xs sm:text-sm text-gray-500 mb-2">
+      <div className="grid grid-cols-7 text-center text-sm text-gray-500 mb-3">
         {daysOfWeek.map(day => (
-          <span key={day} className="py-1">{day}</span>
+          <span key={day} className="py-2">{day}</span>
         ))}
       </div>
 
@@ -106,7 +106,7 @@ const Calendar = () => {
             key={index}
             onClick={() => handleDateClick(day.date, day.isCurrentMonth)}
             className={`
-              aspect-square flex items-center justify-center text-xs sm:text-sm rounded transition-all duration-200
+              aspect-square flex items-center justify-center text-sm rounded transition-all duration-200
               ${day.isCurrentMonth 
                 ? 'text-gray-900 hover:bg-gray-100' 
                 : 'text-gray-300'
@@ -127,12 +127,12 @@ const Calendar = () => {
       </div>
 
       {/* Events for Selected Date */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {getCurrentDateEvents().length > 0 ? (
           getCurrentDateEvents().map((event) => (
             <div 
               key={event.id}
-              className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
+              className="cursor-pointer hover:bg-gray-50 p-3 rounded transition-colors"
               onClick={() => alert(`Opening: ${event.title}`)}
             >
               <p className="text-xs text-gray-400 mb-1">{event.time}</p>

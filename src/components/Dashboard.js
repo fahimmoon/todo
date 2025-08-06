@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; 
 import Header from './Header';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
@@ -26,31 +26,17 @@ const Dashboard = ({ onSidebarToggle, currentPage, onNavigate, sidebarOpen }) =>
   };
 
   return (
-    <main className="flex-1 min-h-screen bg-gray-50 transition-all duration-300 ease-in-out relative z-0">
-      {/* Header with responsive positioning */}
-      <div className="sticky top-0 z-[60] bg-gray-50/95 backdrop-blur-sm border-b border-gray-200">
-        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-          <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
-        </div>
+    <main className={`flex-1 min-h-screen bg-gray-50 transition-all duration-500 ease-in-out ${
+      sidebarOpen ? 'lg:opacity-100' : 'lg:opacity-100'
+    }`}>
+      {/* Header with fixed positioning */}
+      <div className="fixed top-0 left-0 right-0 z-[100] bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 shadow-sm border-b border-gray-200">
+        <Header onSidebarToggle={onSidebarToggle} currentPage={currentPage} onNavigate={onNavigate} />
       </div>
       
-      {/* Floating Sidebar Toggle for Mobile - Always Visible */}
-      <button
-        onClick={onSidebarToggle}
-        className="lg:hidden fixed bottom-6 left-6 z-[80] bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
-        aria-label="Toggle sidebar"
-        title="Open Menu"
-      >
-        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-      
-      {/* Main content with guaranteed mobile visibility */}
-      <div className="relative z-10 px-3 sm:px-4 lg:px-6 py-4 sm:py-6 mobile-main-content mobile-header-spacing mobile-force-visible mobile-sidebar-spacing">
-        <div className="max-w-7xl mx-auto w-full mobile-force-visible">
-          {renderPage()}
-        </div>
+      {/* Main content starts right below header - no gap */}
+      <div className="px-4 sm:px-6 lg:px-8 pb-8 pt-[5rem] max-w-7xl mx-auto">
+        {renderPage()}
       </div>
     </main>
   );

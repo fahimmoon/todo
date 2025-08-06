@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-// Create Dashboard Context
+// Create the context
 const DashboardContext = createContext();
 
-// Custom hook to use Dashboard Context
+// Custom hook to use the dashboard context
 export const useDashboard = () => {
   const context = useContext(DashboardContext);
   if (!context) {
@@ -12,271 +12,72 @@ export const useDashboard = () => {
   return context;
 };
 
-// Dashboard Provider Component
+// Dashboard provider component
 export const DashboardProvider = ({ children }) => {
-  // Notifications State
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: 'Upcoming event',
-      message: 'Landing Design Meeting | Time: 30 min',
-      timestamp: '2 hours ago',
-      type: 'event',
-      isRead: false,
-      date: new Date().toLocaleDateString()
-    },
-    {
-      id: 2,
-      title: 'Message | Product design',
-      message: 'Message from Ken Smith',
-      timestamp: '4 hours ago',
-      type: 'message',
-      isRead: true,
-      date: new Date().toLocaleDateString()
-    },
-    {
-      id: 3,
-      title: 'Task reminder',
-      message: 'Complete project documentation',
-      timestamp: 'Yesterday',
-      type: 'reminder',
-      isRead: false,
-      date: new Date(Date.now() - 86400000).toLocaleDateString()
-    }
+    { id: 1, message: 'Welcome to your dashboard!', type: 'info', read: false },
+    { id: 2, message: 'You have 3 pending tasks', type: 'warning', read: false },
+  ]);
+  const [tasks, setTasks] = useState([
+    { id: 1, title: 'Complete project proposal', completed: false, priority: 'high' },
+    { id: 2, title: 'Review team reports', completed: true, priority: 'medium' },
+    { id: 3, title: 'Schedule client meeting', completed: false, priority: 'low' },
   ]);
 
-  // Quick Actions State
-  const [quickActions, setQuickActions] = useState([
-    {
-      id: 1,
-      title: 'Stay organized',
-      description: 'A clear structure for your notes',
-      icon: '📝',
-      color: 'indigo'
-    },
-    {
-      id: 2,
-      title: 'Sync your notes',
-      description: 'Ensure post notes over syncspace',
-      icon: '🔄',
-      color: 'blue'
-    },
-    {
-      id: 3,
-      title: 'Collaborate and share',
-      description: 'Share notes with colleagues',
-      icon: '👥',
-      color: 'green'
-    }
-  ]);
-
-  // Calendar Events State
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: 'Team meeting',
-      time: '04:30-05:00 PM',
-      date: new Date(2025, 7, 6), // August 6, 2025
-      type: 'meeting'
-    },
-    {
-      id: 2,
-      title: 'Project review',
-      time: '11:30-12:30 PM',
-      date: new Date(2025, 7, 6), // August 6, 2025
-      type: 'review'
-    },
-    {
-      id: 3,
-      title: 'Client presentation',
-      time: '02:00-03:00 PM',
-      date: new Date(2025, 7, 8), // August 8, 2025
-      type: 'presentation'
-    }
-  ]);
-
-  // Calendar State
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-
-  // Modal States
-  const [modals, setModals] = useState({
-    addAction: false,
-    actionDetails: false,
-    addEvent: false
-  });
-
-  // Notification Functions
-  const addNotification = (notification) => {
-    const newNotification = {
+  const addTask = (task) => {
+    const newTask = {
       id: Date.now(),
-      timestamp: 'Just now',
-      isRead: false,
-      date: new Date().toLocaleDateString(),
-      ...notification
+      ...task,
+      completed: false,
     };
-    setNotifications(prev => [newNotification, ...prev]);
+    setTasks(prev => [...prev, newTask]);
   };
 
-  const clearAllNotifications = () => {
-    setNotifications([]);
+  const toggleTask = (taskId) => {
+    setTasks(prev => 
+      prev.map(task => 
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      )
+    );
   };
 
-  const markAsRead = (id) => {
+  const deleteTask = (taskId) => {
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+  };
+
+  const markNotificationAsRead = (notificationId) => {
     setNotifications(prev =>
       prev.map(notification =>
-        notification.id === id
-          ? { ...notification, isRead: true }
+        notification.id === notificationId 
+          ? { ...notification, read: true }
           : notification
       )
     );
   };
 
-  const deleteNotification = (id) => {
-    setNotifications(prev =>
-      prev.filter(notification => notification.id !== id)
-    );
-  };
-
-  // Quick Actions Functions
-  const addQuickAction = (action) => {
-    const newAction = {
+  const addNotification = (notification) => {
+    const newNotification = {
       id: Date.now(),
-      ...action
+      ...notification,
+      read: false,
     };
-    setQuickActions(prev => [...prev, newAction]);
+    setNotifications(prev => [...prev, newNotification]);
   };
-
-  const removeQuickAction = (id) => {
-    setQuickActions(prev =>
-      prev.filter(action => action.id !== id)
-    );
-  };
-
-  // Calendar Functions
-  const addEvent = (event) => {
-    const newEvent = {
-      id: Date.now(),
-      ...event
-    };
-    setEvents(prev => [...prev, newEvent]);
-
-    // Add notification for future events
-    const eventDate = new Date(event.date);
-    const today = new Date();
-    if (eventDate > today) {
-      addNotification({
-        title: 'Upcoming event',
-        message: `${event.title} scheduled for ${eventDate.toLocaleDateString()}`,
-        type: 'event'
-      });
-    }
-  };
-
-  const getEventsForDate = (date) => {
-    return events.filter(event => {
-      const eventDate = new Date(event.date);
-      return eventDate.toDateString() === date.toDateString();
-    });
-  };
-
-  // Modal Functions
-  const openModal = (modalName) => {
-    setModals(prev => ({ ...prev, [modalName]: true }));
-  };
-
-  const closeModal = (modalName) => {
-    setModals(prev => ({ ...prev, [modalName]: false }));
-  };
-
-  const closeAllModals = () => {
-    setModals({
-      addAction: false,
-      actionDetails: false,
-      addEvent: false
-    });
-  };
-
-  // Real-time notification simulation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randomNotifications = [
-        {
-          title: 'System update',
-          message: 'New features available in your dashboard',
-          type: 'system'
-        },
-        {
-          title: 'Task reminder',
-          message: 'Don\'t forget to review today\'s tasks',
-          type: 'reminder'
-        },
-        {
-          title: 'Meeting alert',
-          message: 'Upcoming meeting in 15 minutes',
-          type: 'meeting'
-        }
-      ];
-
-      const randomNotification = randomNotifications[Math.floor(Math.random() * randomNotifications.length)];
-      addNotification(randomNotification);
-    }, 10000); // Every 10 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Group notifications by date
-  const groupedNotifications = notifications.reduce((groups, notification) => {
-    const date = notification.date;
-    const today = new Date().toLocaleDateString();
-    const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
-    
-    let groupKey;
-    if (date === today) {
-      groupKey = 'Today';
-    } else if (date === yesterday) {
-      groupKey = 'Yesterday';
-    } else {
-      groupKey = date;
-    }
-
-    if (!groups[groupKey]) {
-      groups[groupKey] = [];
-    }
-    groups[groupKey].push(notification);
-    return groups;
-  }, {});
 
   const value = {
-    // State
+    currentPage,
+    setCurrentPage,
+    isSidebarCollapsed,
+    setIsSidebarCollapsed,
     notifications,
-    groupedNotifications,
-    quickActions,
-    events,
-    selectedDate,
-    currentMonth,
-    modals,
-
-    // Notification actions
+    tasks,
+    addTask,
+    toggleTask,
+    deleteTask,
+    markNotificationAsRead,
     addNotification,
-    clearAllNotifications,
-    markAsRead,
-    deleteNotification,
-
-    // Quick Actions
-    addQuickAction,
-    removeQuickAction,
-
-    // Calendar actions
-    addEvent,
-    getEventsForDate,
-    setSelectedDate,
-    setCurrentMonth,
-
-    // Modal actions
-    openModal,
-    closeModal,
-    closeAllModals
   };
 
   return (

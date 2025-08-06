@@ -1,303 +1,120 @@
 import React, { useState } from 'react';
 import { useDashboard } from '../../context/DashboardContext';
-import './QuickActions.css';
 
 const QuickActions = () => {
-  const { 
-    quickActions, 
-    addQuickAction, 
-    toggleFavoriteAction, 
-    removeAction,
-    openModal,
-    setActiveModal
-  } = useDashboard();
+  const { quickActions, addQuickAction } = useDashboard();
+  const [showAll, setShowAll] = useState(false);
 
-  const [recentlyUsed, setRecentlyUsed] = useState(new Set());
+  const defaultActions = [
+    {
+      id: 'add-task',
+      title: 'Add Task',
+      description: 'Create a new task',
+      icon: '✓',
+      theme: 'blue',
+      type: 'add-task'
+    },
+    {
+      id: 'schedule-meeting',
+      title: 'Schedule Meeting',
+      description: 'Set up a new meeting',
+      icon: '📅',
+      theme: 'green',
+      type: 'schedule-meeting'
+    },
+    {
+      id: 'upload-document',
+      title: 'Upload Document',
+      description: 'Add a new document',
+      icon: '📄',
+      theme: 'purple',
+      type: 'upload-document'
+    }
+  ];
 
-  // Execute action and track usage
-  const executeAction = (action) => {
-    setRecentlyUsed(prev => new Set([...prev, action.id]));
-    
+  const allActions = [...defaultActions, ...(quickActions || [])];
+  const displayActions = showAll ? allActions : allActions.slice(0, 3);
+
+  const getThemeColor = (theme) => {
+    const colors = {
+      blue: 'bg-blue-500',
+      green: 'bg-green-500',
+      purple: 'bg-purple-500',
+      orange: 'bg-orange-500',
+      red: 'bg-red-500',
+      indigo: 'bg-indigo-500',
+      gray: 'bg-gray-500',
+      pink: 'bg-pink-500'
+    };
+    return colors[theme] || colors.blue;
+  };
+
+  const handleActionClick = (action) => {
     // Handle different action types
     switch (action.type) {
-      case 'modal':
-        if (action.modalType) {
-          setActiveModal(action.modalType);
-          openModal();
-        }
+      case 'add-task':
+        console.log('Add task clicked');
         break;
-      case 'external':
+      case 'schedule-meeting':
+        console.log('Schedule meeting clicked');
+        break;
+      case 'upload-document':
+        console.log('Upload document clicked');
+        break;
+      default:
         if (action.url) {
           window.open(action.url, '_blank');
         }
-        break;
-      case 'navigation':
-        console.log(`Navigate to: ${action.route}`);
-        break;
-      default:
-        console.log(`Execute action: ${action.title}`);
     }
   };
 
-  // Get action icon based on type
-  const getActionIcon = (action) => {
-    const iconMap = {
-      'add-task': '✓',
-      'schedule-meeting': '📅',
-      'upload-document': '📄',
-      'send-message': '💬',
-      'create-reminder': '🔔',
-      'generate-report': '📊',
-      'backup-data': '💾',
-      'view-analytics': '📈',
-      'settings': '⚙️',
-      'help': '❓'
-    };
-    
-    return iconMap[action.type] || action.icon || '⚡';
-  };
-
-  // Get action color theme
-  const getActionTheme = (action) => {
-    const themeMap = {
-      'add-task': 'blue',
-      'schedule-meeting': 'green',
-      'upload-document': 'purple',
-      'send-message': 'orange',
-      'create-reminder': 'red',
-      'generate-report': 'indigo',
-      'backup-data': 'gray',
-      'view-analytics': 'pink',
-      'settings': 'slate',
-      'help': 'cyan'
-    };
-    
-    return themeMap[action.type] || action.theme || 'blue';
-  };
-
-  // Filter actions by category
-  const favoriteActions = quickActions.filter(action => action.favorite);
-  const recentActions = quickActions.filter(action => 
-    recentlyUsed.has(action.id) && !action.favorite
-  );
-  const otherActions = quickActions.filter(action => 
-    !action.favorite && !recentlyUsed.has(action.id)
-  );
-
-  const openCustomActionModal = () => {
-    setActiveModal('custom-action');
-    openModal();
-  };
-
   return (
-    <div className="quick-actions-container">
-      {/* Header */}
-      <div className="quick-actions-header">
-        <div className="header-left">
-          <h3 className="quick-actions-title">Quick Actions</h3>
-          <span className="actions-count">{quickActions.length}</span>
-        </div>
-        <button 
-          className="add-action-button"
-          onClick={openCustomActionModal}
-          title="Add Custom Action"
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+          {allActions.length}
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        {displayActions.map((action) => (
+          <button
+            key={action.id}
+            onClick={() => handleActionClick(action)}
+            className="w-full flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+          >
+            <div className={`flex-shrink-0 w-10 h-10 ${getThemeColor(action.theme)} rounded-lg flex items-center justify-center text-white text-lg`}>
+              {action.icon}
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-gray-900">{action.title}</p>
+              <p className="text-xs text-gray-500">{action.description}</p>
+            </div>
+            <div className="flex-shrink-0">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {allActions.length > 3 && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="w-full mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
         >
-          <span className="add-icon">+</span>
+          {showAll ? 'Show Less' : `Show ${allActions.length - 3} More`}
         </button>
-      </div>
+      )}
 
-      {/* Content */}
-      <div className="quick-actions-content">
-        {quickActions.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">⚡</div>
-            <h4 className="empty-message">No Quick Actions</h4>
-            <p className="empty-description">
-              Add custom actions to streamline your workflow
-            </p>
-            <button 
-              className="create-first-action"
-              onClick={openCustomActionModal}
-            >
-              Create Your First Action
-            </button>
-          </div>
-        ) : (
-          <div className="actions-sections">
-            {/* Favorite Actions */}
-            {favoriteActions.length > 0 && (
-              <div className="actions-section">
-                <div className="section-header">
-                  <span className="section-icon">⭐</span>
-                  <span className="section-title">Favorites</span>
-                  <span className="section-count">{favoriteActions.length}</span>
-                </div>
-                <div className="actions-grid">
-                  {favoriteActions.map(action => (
-                    <ActionCard 
-                      key={action.id}
-                      action={action}
-                      theme={getActionTheme(action)}
-                      icon={getActionIcon(action)}
-                      onExecute={() => executeAction(action)}
-                      onToggleFavorite={() => toggleFavoriteAction(action.id)}
-                      onRemove={() => removeAction(action.id)}
-                      isRecent={recentlyUsed.has(action.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Recent Actions */}
-            {recentActions.length > 0 && (
-              <div className="actions-section">
-                <div className="section-header">
-                  <span className="section-icon">🕒</span>
-                  <span className="section-title">Recently Used</span>
-                  <span className="section-count">{recentActions.length}</span>
-                </div>
-                <div className="actions-grid">
-                  {recentActions.map(action => (
-                    <ActionCard 
-                      key={action.id}
-                      action={action}
-                      theme={getActionTheme(action)}
-                      icon={getActionIcon(action)}
-                      onExecute={() => executeAction(action)}
-                      onToggleFavorite={() => toggleFavoriteAction(action.id)}
-                      onRemove={() => removeAction(action.id)}
-                      isRecent={true}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Other Actions */}
-            {otherActions.length > 0 && (
-              <div className="actions-section">
-                <div className="section-header">
-                  <span className="section-icon">📋</span>
-                  <span className="section-title">All Actions</span>
-                  <span className="section-count">{otherActions.length}</span>
-                </div>
-                <div className="actions-grid">
-                  {otherActions.map(action => (
-                    <ActionCard 
-                      key={action.id}
-                      action={action}
-                      theme={getActionTheme(action)}
-                      icon={getActionIcon(action)}
-                      onExecute={() => executeAction(action)}
-                      onToggleFavorite={() => toggleFavoriteAction(action.id)}
-                      onRemove={() => removeAction(action.id)}
-                      isRecent={false}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Action Card Component
-const ActionCard = ({ 
-  action, 
-  theme, 
-  icon, 
-  onExecute, 
-  onToggleFavorite, 
-  onRemove, 
-  isRecent 
-}) => {
-  const [showMenu, setShowMenu] = useState(false);
-
-  const handleExecute = () => {
-    onExecute();
-    setShowMenu(false);
-  };
-
-  return (
-    <div className={`action-card theme-${theme} ${isRecent ? 'recent' : ''}`}>
-      <button 
-        className="action-button"
-        onClick={handleExecute}
-        title={action.description}
-      >
-        <div className="action-icon">
-          {icon}
-        </div>
-        <div className="action-content">
-          <span className="action-title">{action.title}</span>
-          {action.description && (
-            <span className="action-description">{action.description}</span>
-          )}
-        </div>
+      <button className="w-full mt-4 flex items-center justify-center space-x-2 p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <span className="text-sm font-medium">Add Custom Action</span>
       </button>
-
-      {/* Action Menu */}
-      <div className="action-menu">
-        <button 
-          className="menu-trigger"
-          onClick={() => setShowMenu(!showMenu)}
-          title="Action Options"
-        >
-          <span className="menu-dots">⋯</span>
-        </button>
-        {showMenu && (
-          <div className="menu-dropdown">
-            <button 
-              className="menu-item"
-              onClick={() => {
-                onToggleFavorite();
-                setShowMenu(false);
-              }}
-            >
-              <span className="menu-icon">
-                {action.favorite ? '★' : '☆'}
-              </span>
-              {action.favorite ? 'Remove from Favorites' : 'Add to Favorites'}
-            </button>
-            <button 
-              className="menu-item execute"
-              onClick={handleExecute}
-            >
-              <span className="menu-icon">▶</span>
-              Execute Action
-            </button>
-            <button 
-              className="menu-item delete"
-              onClick={() => {
-                onRemove();
-                setShowMenu(false);
-              }}
-            >
-              <span className="menu-icon">🗑</span>
-              Remove Action
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Status Indicators */}
-      <div className="action-indicators">
-        {action.favorite && (
-          <span className="indicator favorite" title="Favorite">⭐</span>
-        )}
-        {isRecent && (
-          <span className="indicator recent" title="Recently Used">🕒</span>
-        )}
-        {action.shortcut && (
-          <span className="indicator shortcut" title={`Shortcut: ${action.shortcut}`}>
-            ⌨
-          </span>
-        )}
-      </div>
     </div>
   );
 };

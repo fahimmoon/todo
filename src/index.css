@@ -12,77 +12,27 @@
     display: none;
   }
   
-  /* Thin scrollbar styles */
-  .scrollbar-thin {
-    scrollbar-width: thin;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  
-  .scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 3px;
-  }
-  
-  .scrollbar-thumb-gray-600::-webkit-scrollbar-thumb {
-    background-color: #4b5563;
-    border-radius: 3px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: #9ca3af;
-  }
-  
-  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: #6b7280;
-  }
-  
   /* Sidebar-specific styles */
   .sidebar-container {
     -webkit-overflow-scrolling: touch;
   }
-
-  /* Mobile sidebar positioning and animation */
-  @media (max-width: 1023px) {
-    .sidebar-container {
-      position: fixed !important;
-      z-index: 70 !important;
-      top: 0 !important;
-      height: 100vh !important;
-      width: 320px !important;
-      max-width: 90vw !important;
-      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    
-    /* Ensure sidebar slides smoothly */
-    .sidebar-container.open {
-      left: 0 !important;
-    }
-    
-    .sidebar-container.closed {
-      left: -320px !important; /* Width of sidebar */
-    }
-
-    /* Prevent body scroll when sidebar is open */
-    body.sidebar-open {
-      overflow: hidden;
-    }
+  
+  /* Custom scrollbar for sidebar */
+  .sidebar-container::-webkit-scrollbar {
+    width: 4px;
   }
-
-  /* Add smooth animations for sidebar items */
-  .sidebar-container .nav-item {
-    transition: all 0.2s ease-in-out;
+  
+  .sidebar-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
   }
-
-  .sidebar-container .nav-item:hover {
-    transform: translateX(4px);
+  
+  .sidebar-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+  
+  .sidebar-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
   }
 
   /* Large device optimizations */
@@ -249,94 +199,12 @@ html {
       width: 85vw !important;
       max-width: 300px !important;
     }
-    
-    /* Remove gaps on mobile */
-    .mobile-no-gap {
-      gap: 0.25rem !important;
-    }
-    
-    /* Better touch targets */
-    .mobile-touch-target {
-      min-height: 44px;
-      min-width: 44px;
-    }
-    
-    /* Compact header on mobile */
-    .mobile-header {
-      padding: 0.5rem 0.75rem;
-    }
-    
-    /* Ultra-compact spacing for very small devices */
-    .ultra-compact {
-      padding: 0.5rem !important;
-      margin: 0.25rem !important;
-    }
-    
-    /* Better typography scaling */
-    .mobile-text-xs {
-      font-size: 0.65rem !important;
-    }
-    
-    .mobile-text-sm {
-      font-size: 0.75rem !important;
-    }
-  }
-
-  /* Extra small devices (< 360px) */
-  @media (max-width: 360px) {
-    .sidebar-container {
-      width: 90vw !important;
-      max-width: 280px !important;
-    }
-    
-    .ultra-compact {
-      padding: 0.375rem !important;
-      margin: 0.125rem !important;
-    }
-    
-    /* Even more compact for tiny screens */
-    .tiny-screen {
-      font-size: 0.7rem !important;
-      padding: 0.25rem 0.5rem !important;
-    }
   }
 
   /* Medium mobile devices optimization */
   @media (min-width: 481px) and (max-width: 640px) {
     .sidebar-container {
       width: 320px !important;
-    }
-    
-    /* Better spacing for medium devices */
-    .medium-mobile-spacing {
-      padding: 1rem 1.25rem;
-    }
-  }
-
-  /* Tablet optimizations */
-  @media (min-width: 641px) and (max-width: 1023px) {
-    .tablet-spacing {
-      padding: 1.25rem 1.5rem;
-    }
-  }
-
-  /* Better focus and interaction states */
-  .touch-friendly {
-    min-height: 44px;
-    min-width: 44px;
-    touch-action: manipulation;
-  }
-  
-  /* Improved button responsiveness */
-  .btn-responsive {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-  }
-  
-  @media (min-width: 640px) {
-    .btn-responsive {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
     }
   }
 
@@ -391,51 +259,6 @@ html {
     .container-responsive {
       padding-left: 2rem;
       padding-right: 2rem;
-    }
-  }
-
-  /* Mobile content visibility fixes */
-  @media (max-width: 1023px) {
-    .mobile-content-visible {
-      position: relative !important;
-      z-index: 1 !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      display: block !important;
-    }
-
-    .mobile-main-content {
-      min-height: 100vh;
-      width: 100% !important;
-      padding: 1rem;
-      background-color: rgb(249 250 251);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Fix mobile header overlap */
-    .mobile-header-spacing {
-      padding-top: 1rem !important;
-    }
-
-    /* Ensure mobile components are always visible */
-    .mobile-content-visible > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Force content to be visible on mobile */
-    .mobile-force-visible {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      position: relative !important;
-      z-index: 10 !important;
-    }
-
-    /* Better spacing for mobile sidebar toggle */
-    .mobile-sidebar-spacing {
-      padding-bottom: 5rem; /* Space for floating button */
     }
   }
 }
