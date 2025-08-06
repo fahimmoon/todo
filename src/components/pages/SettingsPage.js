@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CogIcon, BellIcon, UserIcon, ShieldCheckIcon, PaintBrushIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { CogIcon, BellIcon, ShieldCheckIcon, PaintBrushIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 const SettingsPage = () => {
   const [settings, setSettings] = useState({
