@@ -62,12 +62,12 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
 
   const sidebarClasses = `
     sidebar-container fixed lg:relative z-50 lg:z-auto
-    bg-indigo-600 text-white flex flex-col py-4 space-y-6 lg:space-y-8 
-    rounded-r-3xl min-h-screen shadow-xl lg:shadow-none
+    bg-white border-r border-gray-200 flex flex-col 
+    shadow-lg lg:shadow-none
     transition-all duration-300 ease-in-out
     ${isMobile 
-      ? `w-72 ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0` 
-      : 'w-16 lg:w-20 relative translate-x-0'
+      ? `w-72 ${isOpen ? 'translate-x-0' : '-translate-x-full'} left-0 top-0 min-h-screen` 
+      : 'w-16 lg:w-20 relative translate-x-0 min-h-screen'
     }
   `;
 
@@ -83,120 +83,59 @@ const Sidebar = ({ isOpen, onToggle, currentPage, onNavigate }) => {
 
       {/* Sidebar */}
       <div className={sidebarClasses}>
-        {/* Header - Make Dashboard Icon Clickable */}
-        <div className="flex items-center justify-between px-4 lg:px-0 lg:justify-center">
-          <div className="flex items-center space-x-3">
-            <button 
-              onClick={() => handleItemClick('dashboard')}
-              className={`p-2 rounded-lg transition-all duration-200 ${
-                activeItem === 'dashboard' 
-                  ? 'bg-indigo-500 scale-105 shadow-lg' 
-                  : 'bg-indigo-700 hover:bg-indigo-500 hover:scale-105'
-              }`}
-              title="Go to Dashboard"
-            >
-              <Squares2X2Icon className="h-6 w-6 lg:h-8 lg:w-8" />
-            </button>
-            {isMobile && (
-              <span className="font-bold text-lg">Dashboard</span>
-            )}
-          </div>
-          
-          {/* Close button for mobile */}
-          {isMobile && (
-            <button
-              onClick={onToggle}
-              className="p-2 hover:bg-indigo-500 rounded-lg transition-colors lg:hidden"
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
-          )}
+        {/* Header - Dashboard Icon */}
+        <div className="flex items-center justify-center py-6 border-b border-gray-100">
+          <button 
+            onClick={() => handleItemClick('dashboard')}
+            className={`p-3 rounded-xl transition-all duration-200 ${
+              activeItem === 'dashboard' 
+                ? 'bg-blue-50 text-blue-600 shadow-sm' 
+                : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+            }`}
+            title="Dashboard"
+          >
+            <Squares2X2Icon className="h-6 w-6" />
+          </button>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex flex-col flex-1 px-4 lg:px-0 lg:items-center space-y-2 lg:space-y-6">
-          {menuItems.map((item) => {
+        <nav className="flex flex-col flex-1 py-6 space-y-2">
+          {menuItems.filter(item => item.id !== 'dashboard').map((item) => {
             const IconComponent = item.icon;
             const isActive = activeItem === item.id;
             
             return (
-              <button
-                key={item.id}
-                onClick={() => handleItemClick(item.id)}
-                className={`group relative flex items-center w-full lg:w-auto p-3 rounded-lg transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-indigo-500 scale-105 shadow-lg' 
-                    : 'hover:bg-indigo-500 hover:scale-105'
-                }`}
-                title={item.label}
-              >
-                <IconComponent className={`h-5 w-5 lg:h-6 lg:w-6 ${isActive ? 'text-white' : item.color} ${isMobile ? 'mr-3' : ''}`} />
-                
-                {/* Label for mobile */}
-                {isMobile && (
-                  <span className="font-medium">{item.label}</span>
-                )}
-
-                {/* Tooltip for desktop */}
-                {!isMobile && (
-                  <div className="absolute left-full ml-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 hidden lg:block">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 rotate-45"></div>
-                  </div>
-                )}
-
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full lg:hidden"></div>
-                )}
-              </button>
+              <div key={item.id} className={`${isMobile ? 'px-4' : 'flex justify-center'}`}>
+                <button
+                  onClick={() => handleItemClick(item.id)}
+                  className={`${isMobile ? 'flex items-center space-x-3 w-full p-3' : 'p-3'} rounded-xl transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-blue-50 text-blue-600 shadow-sm' 
+                      : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+                  }`}
+                  title={item.label}
+                >
+                  <IconComponent className="h-6 w-6" />
+                  {isMobile && (
+                    <span className="font-medium text-gray-700">{item.label}</span>
+                  )}
+                </button>
+              </div>
             );
           })}
         </nav>
 
-        {/* User Profile Section for Mobile */}
+        {/* Mobile Menu - Show labels */}
         {isMobile && (
-          <div className="px-4 py-4 border-t border-indigo-500">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-indigo-400 rounded-full flex items-center justify-center">
-                <UserIcon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-medium text-sm">John Doe</p>
-                <p className="text-xs text-indigo-200">john@example.com</p>
-              </div>
-            </div>
+          <div className="px-4 pb-4">
+            <button
+              onClick={onToggle}
+              className="flex items-center justify-center w-full p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-colors"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
           </div>
         )}
-
-        {/* Quick Stats for Mobile */}
-        {isMobile && (
-          <div className="px-4 pb-4 space-y-3">
-            <div className="bg-indigo-500 bg-opacity-50 rounded-lg p-3">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-indigo-200">Today's Progress</span>
-                <span className="text-sm font-bold">75%</span>
-              </div>
-              <div className="w-full bg-indigo-400 bg-opacity-30 rounded-full h-2">
-                <div className="bg-white h-2 rounded-full w-3/4 transition-all duration-500"></div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-center">
-              <div className="bg-indigo-500 bg-opacity-50 rounded-lg p-2">
-                <div className="text-lg font-bold">12</div>
-                <div className="text-xs text-indigo-200">Tasks</div>
-              </div>
-              <div className="bg-indigo-500 bg-opacity-50 rounded-lg p-2">
-                <div className="text-lg font-bold">3</div>
-                <div className="text-xs text-indigo-200">Meetings</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Bottom spacer */}
-        <div className="flex-shrink-0"></div>
       </div>
     </>
   );
