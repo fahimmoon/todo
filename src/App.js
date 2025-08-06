@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
+import { DashboardProvider } from './context/DashboardContext';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -34,37 +35,39 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Desktop Sidebar - Part of flex layout */}
-      {!isMobile && (
-        <Sidebar 
-          isOpen={isSidebarOpen}
-          onToggle={toggleSidebar}
-          currentPage={currentPage}
-          onNavigate={handleNavigate}
-        />
-      )}
+    <DashboardProvider>
+      <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
+        {/* Desktop Sidebar - Part of flex layout */}
+        {!isMobile && (
+          <Sidebar 
+            isOpen={isSidebarOpen}
+            onToggle={toggleSidebar}
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+          />
+        )}
 
-      {/* Main content - Ensure it's always visible on mobile */}
-      <div className={`flex-1 min-w-0 relative ${isMobile ? 'w-full overflow-auto' : ''}`}>
-        <Dashboard 
-          onSidebarToggle={toggleSidebar}
-          currentPage={currentPage}
-          onNavigate={handleNavigate}
-          sidebarOpen={isSidebarOpen}
-        />
+        {/* Main content - Ensure it's always visible on mobile */}
+        <div className={`flex-1 min-w-0 relative ${isMobile ? 'w-full overflow-auto' : ''}`}>
+          <Dashboard 
+            onSidebarToggle={toggleSidebar}
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            sidebarOpen={isSidebarOpen}
+          />
+        </div>
+        
+        {/* Mobile Sidebar - Fixed overlay, not part of flex layout */}
+        {isMobile && (
+          <Sidebar 
+            isOpen={isSidebarOpen}
+            onToggle={toggleSidebar}
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+          />
+        )}
       </div>
-      
-      {/* Mobile Sidebar - Fixed overlay, not part of flex layout */}
-      {isMobile && (
-        <Sidebar 
-          isOpen={isSidebarOpen}
-          onToggle={toggleSidebar}
-          currentPage={currentPage}
-          onNavigate={handleNavigate}
-        />
-      )}
-    </div>
+    </DashboardProvider>
   );
 }
 
